@@ -5,7 +5,6 @@
  */
 
 
-
 // Define physical parameters of dc brushless motor
 #define MOTOR_R 1
 #define MOTOR_L 1
@@ -18,6 +17,7 @@
 #define DEFAULT_IN_PIN1 10
 #define DEFAULT_IN_PIN2 11
 
+//INA219
 enum motormode {
   FORWARD=0,
   REVERSE=1,
