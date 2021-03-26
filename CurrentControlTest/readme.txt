@@ -10,3 +10,10 @@ Issues: Need to alter Adafruit INA_219 Library. Will do a workaround to get it p
         Derivative and Integral Error terms need to likely be re-evaluated
         
         Maybe make a memory object storing last N values and go by that?
+        
+        
+        So Kp is the proportional constant, Kd is the derivative constant, and Ki is the integral constant. I added a Kc term, which is the a overall gain multiplier, to scale the values if needed.
+        
+        The operating frequency is 1/SAMPLE_PERIOD
+        
+        Any outputs to the motor driver below THRESHOLD puts the motors in to free spin, or free stop mode.
