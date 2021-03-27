@@ -5,9 +5,13 @@ Issues: Need to alter Adafruit INA_219 Library. Will do a workaround to get it p
         May want to go down to a lower sampling averaging value to run system at a higher rate. Aiming for 60fps lol
         Right now each cycle takes around 75ish ms, conservatively, so we're not getting much more than 10fps. 
         
+        UPDATE: 50Hz is working pretty good. Gonna keep playing with number of samples and rate and such. Still need to try to mess with a MAF.
+        
         One idea is to lower the averaging rate, then doing a moving average filter of the output data.
         
         Derivative and Integral Error terms need to likely be re-evaluated
+        
+        UPDATE: They were wrong, simple fix helped enormously
         
         Maybe make a memory object storing last N values and go by that?
         
@@ -17,3 +21,5 @@ Issues: Need to alter Adafruit INA_219 Library. Will do a workaround to get it p
         The operating frequency is 1/SAMPLE_PERIOD
         
         Any outputs to the motor driver below THRESHOLD puts the motors in to free spin, or free stop mode.
+
+        NEED TO DO: Scale output values to completely avoid trying to go under the stall threshold
