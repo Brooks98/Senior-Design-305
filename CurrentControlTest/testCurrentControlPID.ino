@@ -8,7 +8,7 @@ Adafruit_INA219 ina219; //Create Current Sensor Object
 motorDriver motor1; //Create motorDriver object
 
 #define MAF_SAMPLES 79 //This * Refresh_Period should be a multiple of our PWM period, 0.02s
-#define REFRESH_PERIOD 0.005 //In s. Corresponds to sampling rate of 50Hz
+#define REFRESH_PERIOD 0.005 //In s. Corresponds to sampling rate of 200Hz
 #define MOTOR_THRESHOLD 5 //Any output below this percent will have the motor free spin
 #define STALL_THRESHOLD 30
 
