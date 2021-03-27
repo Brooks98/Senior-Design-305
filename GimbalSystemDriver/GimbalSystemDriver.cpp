@@ -2,16 +2,19 @@
 
 GimbalSystemDriver::GimbalSystemDriver(){
   km = 1; kv = 1;
-  ena = 9; in1 = 10; in2 = 11; //Use Pins 9,10,11 as default for motor
-  enc1 = 13; enc2 = 14; //Set default Encoder Pins
-  motor_thresh = 0; stall_thresh = 0;
-  refresh_period = 0.01; //100Hz operating frequency
-  numsamples = 8; //8 Point MAF Default
-  desspeed = 0; descur = 0; destorque = 0; //Zero setpoint
+  ena = DEFAULT_MENA; in1 = DEFAULT_MIN1; in2 = DEFAULT_MIN2; //Use Pins 9,10,11 as default for motor
+  enc1 = DEFAULT_ENC1; enc2 = DEFAULT_ENC2; //Set default Encoder Pins
+  motor_thresh = DEFAULT_MOTOR_THRESH; 
+  stall_thresh = DEFAULT_STALL_THRESH;
+  refresh_period = DEFAULT_REFRESH_PERIOD; //100Hz operating frequency
+  numsamples = DEFAULT_NUMSAMPLES; //8 Point MAF Default
+  
+  desspeed = descur = destorque = 0; //Zero setpoint
   nowerr_c = lasterr_c = deriv_c = integ_c = 0; //Zero PID error terms
   nowerr_s = lasterr_s = deriv_s = integ_s = 0;
   for (int i=0;i<MAX_SAMPLES;i++) //Zero MAF buffer
     currents[i] = speeds[i] = 0;
+  
   
 }
 
