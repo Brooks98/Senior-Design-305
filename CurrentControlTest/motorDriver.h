@@ -30,13 +30,15 @@ class motorDriver{
     //motorDriver(float r_in,float l_in,float kv_in,float km_in,float j_in); //Constructor with motor parameters 
     void spinMotor(int mode, float pulse_per);
     void PinSetup(int ena, int in1, int in2);
-
+    void setThreshold(int thresh);
+    
     int ena_pin, in_pin1, in_pin2;
     int gas;
     float r, l; //resistance and inductance
     float kv, km; //voltage and torque (motor) constants
     float j; //Motor or system moment of inertia
     float w_est; //Estimated angular velocity
+    int motor_thresh;
 };
 
 
@@ -51,10 +53,12 @@ motorDriver::motorDriver(){
   j = MOTOR_J;
   gas = 0;
   w_est = 0;
+  motor_thresh = 0;
 }
 
-//motorDriver::motorDriver(
-//{}
+void motorDriver::setThreshold(int thresh){
+  motor_thresh = thresh;  
+}
 
 void motorDriver::spinMotor(int mode, float pulse_per){
   gas = int(pulse_per*255/100) % 256 ;
