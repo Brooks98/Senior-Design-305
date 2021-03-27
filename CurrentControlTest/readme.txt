@@ -1,4 +1,9 @@
+Github Tips:
+
 To create directory create a file as /foldername/filename.txt
+
+A readme.txt is automatically displayed when it's directory is pulled up
+
 
 Issues: Need to alter Adafruit INA_219 Library. Will do a workaround to get it portable for easier group testing
 
@@ -6,6 +11,8 @@ Issues: Need to alter Adafruit INA_219 Library. Will do a workaround to get it p
         Right now each cycle takes around 75ish ms, conservatively, so we're not getting much more than 10fps. 
         
         UPDATE: 50Hz is working pretty good. Gonna keep playing with number of samples and rate and such. Still need to try to mess with a MAF.
+        
+        UPDATE 2: MAF definitely works pretty better. Need to mess around and paramterize everything even more. Maybe try much higher sample rate and bigger MAF. Maybe we can try a higher PWM frequency for the L298N input.
         
         One idea is to lower the averaging rate, then doing a moving average filter of the output data.
         
