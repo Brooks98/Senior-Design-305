@@ -7,17 +7,18 @@ Adafruit_INA219 ina219; //Create Current Sensor Object
 
 motorDriver motor1; //Create motorDriver object
 
-#define MAF_SAMPLES 16 
-#define REFRESH_PERIOD 0.02 //In s. Corresponds to sampling rate of 50Hz
-#define MOTOR_THRESHOLD 10 //Any output below this percent will have the motor free spin
+#define MAF_SAMPLES 79 //This * Refresh_Period should be a multiple of our PWM period, 0.02s
+#define REFRESH_PERIOD 0.005 //In s. Corresponds to sampling rate of 50Hz
+#define MOTOR_THRESHOLD 5 //Any output below this percent will have the motor free spin
+#define STALL_THRESHOLD 30
+
 elapsedMillis sinceRead; 
 float curerr=0;
 float lasterr=0;
 float deriv=0; 
 float integ=0;
-float descur=50; //Our setpoint, in mA. "Maintain 200mA"
+float descur=250; //Our setpoint, in mA. "Maintain 200mA"
 float outp=0;
-
 
 float nowcur = 0;
 float currents[MAF_SAMPLES];
@@ -29,10 +30,10 @@ float loadvoltage = 0;
 float power_mW = 0;
 
 //PID Controller Constants
-float kp = 0.10;  //Proportional constant
-float kd = 0.00001;  //Derivative constant
-float ki = 0.6;  //Integral constant
-float kc = 1.0; //Overall Controller Gain
+float kp = 0.15;  //Proportional constant
+float kd = 0.001;  //Derivative constant
+float ki = 0.75;  //Integral constant
+float kc = 0.8; //Overall Controller Gain
 
 
 
@@ -48,6 +49,7 @@ void setup() {
     while (1) { delay(10); }
   }
   motor1.spinMotor(0,outp); //Inital Spin
+  motor1.setThreshold(STALL_THRESHOLD); //Set this, it helps a ton, take the slack out of motor
 }
 
 void loop() {
@@ -92,19 +94,24 @@ void loop() {
       currents[i]=currents[i-1];
       
     currents[0]=current_mA;
+
+    //Calculating our PID terms
     curerr = descur - nowcur; //Calculate proportional error
-    deriv = (curerr - lasterr)/REFRESH_PERIOD; //Calculate derivative error
+    deriv = -(curerr - lasterr)/REFRESH_PERIOD; //Calculate derivative error
     integ += curerr*REFRESH_PERIOD;   //Calculate integral error
-  
+
+    //Combining PID terms multiplied by PID parameters  
     outp = kc*(curerr*kp + deriv*kd + integ*ki); //Output is each error scaled by corresponding k
   
     lasterr = curerr; //Save error for next run for derivative term
 
+    //Scale to 100% Can maybe do this more sophisticatedly, with exponential "soft" stops
     if (outp>100.0)
       outp=100.0;
     else if(outp<-100.0)
       outp=-100.0;
- 
+
+    //Use these to print parameters to Arduino Serial Plotter 
     //Serial.print(curerr);
     //Serial.print("  ");
     //Serial.print(deriv);
@@ -114,13 +121,12 @@ void loop() {
     Serial.print(nowcur);
     Serial.print("  ");
     Serial.println(outp);
-    
-
+   
     
     if (outp>(MOTOR_THRESHOLD)) //If output positive, spin clockwise
       motor1.spinMotor(FORWARD,outp);
     else if (outp<(-MOTOR_THRESHOLD)){  //If output negative, counter clockwise
-      outp=-outp;
+      outp=-outp;//Make outp positive
       motor1.spinMotor(REVERSE,outp);
     }
     else{ //Motor is in "dead zone", free stop

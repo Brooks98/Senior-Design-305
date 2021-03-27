@@ -61,7 +61,7 @@ void motorDriver::setThreshold(int thresh){
 }
 
 void motorDriver::spinMotor(int mode, float pulse_per){
-  gas = int(pulse_per*255/100) % 256 ;
+  gas = int(pulse_per*((255-motor_thresh)/100) + motor_thresh) % 256 ;
   if(mode == FORWARD){
     digitalWrite(ena_pin, HIGH);
     analogWrite(in_pin1, gas);
