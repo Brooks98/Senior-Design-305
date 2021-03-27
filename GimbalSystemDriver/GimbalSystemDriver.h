@@ -14,7 +14,6 @@ class GimbalSystemDriver{
     //int setINAPins(); Uses Default Teensy I2C Pins. 
     int setINAaddr(int adr); //Need this as we will have 2 sensors on one I2C Bus. Wire extra pins to GND or VCC to set the adr on the INA devices
     int setEncoderPins(int in1, int in2);
-    const int configurePins(void);
     const int configureINA(void);
     
     //Parameterization
@@ -36,8 +35,9 @@ class GimbalSystemDriver{
     float readCurrent_filtered(void);
     float readTorque(void);
     
-    //Pins 
-    int ena, in1, in2;
+    //Pins
+    int ena, in1, in2; //Motor Pins
+    int enc1, enc2; //Encoder Pins
     //System Parameters
     float refresh_period; //In seconds
     float motor_thresh;
