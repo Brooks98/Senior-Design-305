@@ -18,7 +18,7 @@ Issues: Need to alter Adafruit INA_219 Library. Will do a workaround to get it p
         
         Derivative and Integral Error terms need to likely be re-evaluated
         
-        UPDATE: They were wrong, simple fix helped enormously
+        UPDATE: They were wrong, simple fix helped enormously. It seems the derivative terms actually helps sometimes? Idk. Should do a linear regression on past so many values for a filtered slope. Or just MAF the derivative term. Hell, MAF everything!
         
         Maybe make a memory object storing last N values and go by that?
         
