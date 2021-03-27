@@ -4,8 +4,16 @@
 #ifndef GIMBAL_SYS_DRIVE
 #define GIMBAL_SYS_DRIVE
 
-#define MAX_SAMPLES 100
-
+#define MAX_SAMPLES 100 //For MAF, IIR, or FIR filter buffer
+#define DEFAULT_MENA 9
+#define DEFAULT_MIN1 10
+#define DEFAULT_MIN2 11
+#define DEFAULT_ENC1 13
+#define DEFAULT_ENC2 14
+#define DEFAULT_NUMSAMPLES 8
+#define DEFAULT_MOTOR_THRESH 10 //In Percent
+#define DEFAULT_STALL_THRESH 25 //In Percent
+#define DEFAULT_REFRESH_PERIOD 0.01 //100Hz
 class GimbalSystemDriver{
   public:
     //utility
@@ -14,7 +22,7 @@ class GimbalSystemDriver{
     //int setINAPins(); Uses Default Teensy I2C Pins. 
     int setINAaddr(int adr); //Need this as we will have 2 sensors on one I2C Bus. Wire extra pins to GND or VCC to set the adr on the INA devices
     int setEncoderPins(int in1, int in2);
-    const int configureINA(void);
+    int configureINA(void);
     
     //Parameterization
     int setMotorKs(float kv);
