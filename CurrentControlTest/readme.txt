@@ -14,6 +14,8 @@ Issues: Need to alter Adafruit INA_219 Library. Will do a workaround to get it p
         
         UPDATE 2: MAF definitely works pretty better. Need to mess around and paramterize everything even more. Maybe try much higher sample rate and bigger MAF. Maybe we can try a higher PWM frequency for the L298N input.
         
+        UPDATE 3: Raising system refresh rate helps a lot, we need to mess with PWM frequency to match. Also try exponential MAF, FIR, IIR, etc, and optimize MAF algorithm.
+                  Also need to trail off the integral term at some point.
         One idea is to lower the averaging rate, then doing a moving average filter of the output data.
         
         Derivative and Integral Error terms need to likely be re-evaluated
