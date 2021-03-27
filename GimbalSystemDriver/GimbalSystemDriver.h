@@ -4,37 +4,67 @@
 #ifndef GIMBAL_SYS_DRIVE
 #define GIMBAL_SYS_DRIVE
 
+#define MAX_SAMPLES 100
 
 class GimbalSystemDriver{
   public:
-    
-  
     //utility
     GimbalSystemDriver(void);
-    int setMotorPins(const int ena, const int in1, const int in2);
+    int setMotorPins(int ena, int in1, int in2);
     //int setINAPins(); Uses Default Teensy I2C Pins. 
-    int setINAaddr(int adr); //Need this as we will have 2 sensors on one I2C Buse
-    int setEncoderPins();
+    int setINAaddr(int adr); //Need this as we will have 2 sensors on one I2C Bus. Wire extra pins to GND or VCC to set the adr on the INA devices
+    int setEncoderPins(int in1, int in2);
     const int configurePins(void);
     const int configureINA(void);
     
     //Parameterization
-    int setMotorParams();
-    int setGimbalParams();
-    int setCCPID(float kp, float ki, float kd, float kc);
-    int setSCPID(float kp, float ki, float kd, float kc);
+    int setMotorParams(float kv);
+    //int setGimbalParams();
+    int setCCPID(float kp, float ki, float kd, float kc); //Set current/torque control PID parameters
+    int setSCPID(float kp, float ki, float kd, float kc); //Set speed control PID parameters
     int setSamplePeriod(float T);
     
     //Action!
     int driveSpeed(const int speed);
     int driveCurrent(const int cur);
-    int driveTorque(const int torque);
+    //int driveTorque(const int torque);
     int findZero(void);
-  
+   
     //Read Data
     float readSpeed(void);
     float readCurrent_raw(void);
     float readCurrent_filtered(void);
     float readTorque(void);
+    
+    //System Parameters
+    float refresh_period; //In seconds
+    float motor_threshold;
+    //Motor Parameters
+    float stall_threshold;
+    float kv;
+    float km;
+    
+    //INA_219 Output Data
+    float shuntvoltage;
+    float busvoltage;
+    float current_mA;
+    float loadvoltage;
+    float power_mW;
+
+    //Filter Data (Should use a list type structure for performance eventually)
+    float num_samples;
+    float currents[MAX_SAMPLES]; float speeds[MAX_SAMPLES];
   
+    //PID Controller Setpoints
+    float desspeed; float descur; float destorque;
+    //PID Controller Constants
+    float kp_speed; float kp_cur; //Proportional constant
+    float kd_speed; float kd_cur; //Derivative constant
+    float ki_speed; float ki_cur; //Integral constant
+    float kc_speed; float kc_cur; //Overall Controller Gain
+    //PID Error Terms
+    float nowerr_c; float nowerr_s;
+    float lasterr_c; float lasterr_s;
+    float deriv_c; float deriv_s;
+    float integ_c; float integ_s;
 };
