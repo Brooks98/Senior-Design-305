@@ -18,7 +18,7 @@ class GimbalSystemDriver{
     const int configureINA(void);
     
     //Parameterization
-    int setMotorParams(float kv);
+    int setMotorKs(float kv);
     //int setGimbalParams();
     int setCCPID(float kp, float ki, float kd, float kc); //Set current/torque control PID parameters
     int setSCPID(float kp, float ki, float kd, float kc); //Set speed control PID parameters
@@ -36,11 +36,13 @@ class GimbalSystemDriver{
     float readCurrent_filtered(void);
     float readTorque(void);
     
+    //Pins 
+    int ena, in1, in2;
     //System Parameters
     float refresh_period; //In seconds
-    float motor_threshold;
+    float motor_thresh;
     //Motor Parameters
-    float stall_threshold;
+    float stall_thresh;
     float kv;
     float km;
     
