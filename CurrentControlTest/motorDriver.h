@@ -61,7 +61,7 @@ void motorDriver::setThreshold(int thresh){
 }
 
 void motorDriver::spinMotor(int mode, float pulse_per){
-  gas = int(pulse_per*((255-motor_thresh)/100) + motor_thresh) % 256 ;
+  gas = int(pulse_per*((255-motor_thresh)/100.0) + motor_thresh) % 256 ;
   if(mode == FORWARD){
     digitalWrite(ena_pin, HIGH);
     analogWrite(in_pin1, gas);
@@ -91,4 +91,7 @@ void motorDriver::PinSetup(int ena, int in1, int in2){
   pinMode(ena_pin, OUTPUT);
   pinMode(in_pin1, OUTPUT);
   pinMode(in_pin2, OUTPUT);
+  //analogWriteFrequency(in_pin1, 146484.38);
+  //analogWriteFrequency(in_pin2, 146484.38);
+  //analogWriteResolution(10);
 }  
