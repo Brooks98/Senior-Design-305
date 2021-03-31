@@ -1,29 +1,38 @@
 //Team 305, Haptic Feedback Controller
 #include "Adafruit_INA219.h"
+#include <Wire.h>
 
 #ifndef GIMBAL_SYS_DRIVE
 #define GIMBAL_SYS_DRIVE
 
-#define MAX_SAMPLES 100 //For MAF, IIR, or FIR filter buffer
-#define DEFAULT_MENA 9
-#define DEFAULT_MIN1 10
-#define DEFAULT_MIN2 11
+//Default Pin Assignments
+#define DEFAULT_MENA 7
+#define DEFAULT_MIN1 8
+#define DEFAULT_MIN2 9
 #define DEFAULT_ENC1 13
 #define DEFAULT_ENC2 14
-#define DEFAULT_NUMSAMPLES 8
+
+//Default System parameters
 #define DEFAULT_MOTOR_THRESH 10 //In Percent
 #define DEFAULT_STALL_THRESH 25 //In Percent
 #define DEFAULT_REFRESH_PERIOD 0.01 //100Hz
+#define DEFUALT_PWM_RES 8
+
+//Current Sensor Parameters
+#define DEFAULT_INA219_ADR 1
+#define 
+
+#define DEFAULT_IIR_A 0.8
+
 class GimbalSystemDriver{
   public:
     //utility
     GimbalSystemDriver(void);
-    int setMotorPins(int ena, int in1, int in2);
-    //int setINAPins(); Uses Default Teensy I2C Pins. 
-    int setINAaddr(int adr); //Need this as we will have 2 sensors on one I2C Bus. Wire extra pins to GND or VCC to set the adr on the INA devices
-    int setEncoderPins(int in1, int in2);
-    int configureINA(void);
-    
+    int setMotorPins(int _ena, int _in1, int _in2);
+    int setEncoderPins(int _enc1, int _enc2);
+    int configureINA219(void);
+    int configurePWM(int _resPWM);
+  
     //Parameterization
     int setMotorKs(float kv);
     //int setGimbalParams();
@@ -48,7 +57,9 @@ class GimbalSystemDriver{
     int enc1, enc2; //Encoder Pins
     //System Parameters
     float refresh_period; //In seconds
+    int resPWM; //PWM resolution in bits
     float motor_thresh;
+  
     //Motor Parameters
     float stall_thresh;
     float kv;
