@@ -37,17 +37,17 @@ class GimbalSystemDriver{
     int setMotorKs(float kv);
     //int setGimbalParams();
     int setCCPID(float kp, float ki, float kd, float kc); //Set current/torque control PID parameters
-    int setSCPID(float kp, float ki, float kd, float kc); //Set speed control PID parameters
+    //int setSCPID(float kp, float ki, float kd, float kc); //Set speed control PID parameters
     int setSamplePeriod(float T);
     
     //Action!
-    int driveSpeed(const int speed);
+    //int driveSpeed(const int speed);
     int driveCurrent(const int cur);
     //int driveTorque(const int torque);
     int findZero(void);
    
     //Read Data
-    float readSpeed(void);
+    //float readSpeed(void);
     float readCurrent_raw(void);
     float readCurrent_filter1(void);
     float readCurrent_filter2(void);
