@@ -53,6 +53,7 @@ class GimbalSystemDriver{
     float readCurrent_filter2(void);
     float readTorque(void);
     
+  private:
     //Pins
     int ena, in1, in2; //Motor Pins
     int enc1, enc2; //Encoder Pins
