@@ -18,7 +18,13 @@ GimbalSystemDriver::GimbalSystemDriver(){
   nowerr_s = lasterr_s = deriv_s = integ_s = 0;
   for (int i=0;i<MAX_SAMPLES;i++) //Zero MAF buffer
     currents[i] = speeds[i] = 0;
-
+ 
+  //Configure Pins
+  pinMode(ena, OUTPUT);
+  pinMode(in1, OUTPUT);
+  pinMode(in2, OUTPUT);
+  pinMode(enc1, INPUT);
+  pinMode(enc2, INPUT);
 }
 
 /*
@@ -26,7 +32,7 @@ GimbalSystemDriver::GimbalSystemDriver(){
  *  INPUTS _ena, _in1, _in2 - L298 Motor driver pins, _in1, and _in2 MUST be FlexPWM pins
  *  NOTES - MUST USE A FLEXPWM timer controlled pin! NOT a QuadTimer!
  */
-int GimbalSystemDriver::setMotorPins(int _ena int _in1, int _in2){
+int GimbalSystemDriver::setMotorPins(int _ena = DEFAULT_MENA, int _in1 = DEFAULT_MIN1, int _in2 = DEFAULT_MIN2){
   ena = _ena;
   in1 = _in1;
   in2 = _in2;
@@ -34,6 +40,18 @@ int GimbalSystemDriver::setMotorPins(int _ena int _in1, int _in2){
   pinMode(in1, OUTPUT);
   pinMode(in2, OUTPUT);
   return 0;
+}
+
+/*
+ *  setEncoderPins: Sets pins to be used by HardwareEncoder Library
+ *  INPUTS _enc1, _enc2: Pin assignments for encoder
+ *  NOTES: Library usage link here
+ */
+int GimbalSystemDriver::setEncoderPins(int _enc1 = DEFAULT_ENC1, int _enc2 = DEFAULT_ENC2){
+  enc1 = _enc1;
+  enc2 = _enc2;
+  pinMode(enc1, INPUT);
+  pinMode(enc2, INPUT);
 }
 
 /*
@@ -75,3 +93,5 @@ int GimbalSystemDriver::configurePWM(int _resPWM = DEFUALT_PWM_RES){
   resPWM = _resPWM;
   return 0; 
 }
+
+int GimbalSystemDriver::configureINA(int adr = DEFAULT_INA_ADR)
