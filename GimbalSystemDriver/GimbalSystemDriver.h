@@ -49,7 +49,8 @@ class GimbalSystemDriver{
     //Read Data
     float readSpeed(void);
     float readCurrent_raw(void);
-    float readCurrent_filtered(void);
+    float readCurrent_filter1(void);
+    float readCurrent_filter2(void);
     float readTorque(void);
     
     //Pins
@@ -72,9 +73,9 @@ class GimbalSystemDriver{
     float loadvoltage;
     float power_mW;
 
-    //Filter Data (Should use a list type structure for performance eventually)
-    float num_samples;
-    float currents[MAX_SAMPLES]; float speeds[MAX_SAMPLES];
+    //Filter Data IIR Filter
+    float a1, a2, a3, a4;
+    int f1_stages, f2_stages;
   
     //PID Controller Setpoints
     float desspeed; float descur; float destorque;
