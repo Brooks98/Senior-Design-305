@@ -1,4 +1,7 @@
 IN PROGRESS: See CurrentControlPIDtest to mess around with some of this
+
+Using an object oriented approach because it would become nightmare spaghetti without; this will give a super clean interface and keep our main file nice and clean.
+
 Here, I want to build a class that has all the tools we need to fine tune the control of our motors.
 Hopefully then, actually building the control algorithms for the haptic feedback will be much simpler.
 Included will be motor and gimbal system parameters.
