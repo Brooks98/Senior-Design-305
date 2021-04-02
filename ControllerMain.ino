@@ -29,13 +29,14 @@ int currentright;
 #include <nRF24L01.h>
 #include <RF24.h>
 RF24 radio(8, 7); // CE, CSN
-const byte addresses [][6] = {"00001", "00002"};    //Setting the two addresses. One for transmitting and one for receiving
+const byte addresses [][6] = {"007", "001"};    //Setting the two addresses. One for transmitting and one for receiving
 int distance = 0;
 //***************************************
 
 //Info to send to vehicle ******************
+int data[2] = {0, 0}; //data[0] = speed, data[1] = turning
 int speedy; //negative is backwards, forward in positive
-
+int turn;
 //******************************************
 
 
@@ -83,27 +84,36 @@ void loop()
   //Calculates speed & direction ********
   //speedy = (currentleft - centerleft)* ((200)/(abs(forwardmax)+abs(backwardmax)));
   speedy = currentleft;
+  data[0] = speedy;
+  turn = currentright;
+  data[1] = turn;
   //*************************************
   
   delay(10);
   radio.startListening();                    //This sets the module as receiver
  
   if (radio.available())                     //Looking for incoming data
-  { //radio.read(&button_state, sizeof(button_state));
-    radio.read(&distance, sizeof(distance)); // reading in data for distance sensor
-    Serial.print("Distance: ");
-    Serial.print(distance);
+  {
+    //radio.read(&distance, sizeof(distance)); // reading in data for distance sensor
+//    Serial.print("Distance: ");
+//    Serial.print(distance);
 //    Serial.println(" cm");
-    Serial.print("cm\tLeft Encoder = ");
+    Serial.print("Left Encoder = ");
     Serial.print(currentleft);
     Serial.print("\tSpeedy = ");
     Serial.print(speedy);
     Serial.print("\tRight Encoder = ");
     Serial.print(currentright);
-    Serial.print("\n");
+  //  Serial.print("\n");
 
     radio.stopListening();
-    radio.write(&speedy, sizeof(speedy));
+    Serial.print("\tData[0] = ");
+    Serial.print(data[0]);
+    Serial.print("\tData[1] = ");
+    Serial.print(data[1]);
+    Serial.print("\n");
+    radio.write(data, sizeof(data));
+    //radio.write(&turn, sizeof(turn));
     //Feedback ****
 //    while(current > center + 5 && distance < 20)
 //    {
