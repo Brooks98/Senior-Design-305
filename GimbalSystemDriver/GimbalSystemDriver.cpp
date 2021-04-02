@@ -74,17 +74,17 @@ int GimbalSystemDriver::setMotorKs(float _kv){
 int GimbalSystemDriver::configurePWM(int _resPWM = DEFUALT_PWM_RES){
   if(_resPWM == 8){
     analogWriteFrequency(in1, 585937.5);
-    analogWriteFrequency(in1, 585937.5);  
+    analogWriteFrequency(in2, 585937.5);  
     analogWriteResolution(8);
   }
   else if(_resPWM == 9){
     analogWriteFrequency(in1, 292968.75);
-    analogWriteFrequency(in1, 292968.75);  
+    analogWriteFrequency(in2, 292968.75);  
     analogWriteResolution(9);
   } 
   else if(_resPWM == 10){
     analogWriteFrequency(in1, 146484.38);
-    analogWriteFrequency(in1, 146484.38);  
+    analogWriteFrequency(in2, 146484.38);  
     analogWriteResolution(10);
   }
   else{
