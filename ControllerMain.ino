@@ -1,5 +1,8 @@
 //Encoder *********************************
 #include <Encoder.h>
+#include <SPI.h>
+#include <nRF24L01.h>
+#include <RF24.h>
 
 Encoder motorleft(2, 3);
 Encoder motorright(33,34);
@@ -25,16 +28,13 @@ int currentright;
 //****************************************
 
 //Radio *********************************
-#include <SPI.h>
-#include <nRF24L01.h>
-#include <RF24.h>
 RF24 radio(8, 7); // CE, CSN
 const byte addresses [][6] = {"007", "001"};    //Setting the two addresses. One for transmitting and one for receiving
 int distance = 0;
 //***************************************
 
 //Info to send to vehicle ******************
-int data[2] = {0, 0}; //data[0] = speed, data[1] = turning
+int data[4] = {0, 0,0,0}; //data[0] = speed, data[1] = turning
 int speedy; //negative is backwards, forward in positive
 int turn;
 //******************************************
@@ -53,8 +53,9 @@ void setup() {
   radio.begin();                            //Starting the radio communication
   radio.openWritingPipe(addresses[0]);      //Setting the address at which we will send the data
   radio.openReadingPipe(1, addresses[1]);   //Setting the address at which we will receive the data
-  radio.setPALevel(RF24_PA_MAX);            //You can set it as minimum or maximum depending on the distance between the transmitter and receiver.
-  
+  //radio.setPALevel(RF24_PA_MAX);            //You can set it as minimum or maximum depending on the distance between the transmitter and receiver.
+  radio.setDataRate( RF24_250KBPS );
+  radio.setRetries(1,15); // delay, count
   //initialvalues(); //calculates center encoder value at startup
   //recenter();
 }
@@ -64,15 +65,15 @@ void loop()
   forwardmax = 50;
   backwardmax = -50;
 //  delay(100);
-  // Gets encoder value ********** eventually add other motor
-  long newLeft;
+  // Gets encoder values **********
+  int newLeft;
   newLeft = motorleft.read();
   if (newLeft != currentleft) {
 
     currentleft = newLeft;
   }
 
-  long newRight;
+  int newRight;
   newRight = motorright.read();
   if(newRight != currentright)
   {
@@ -84,12 +85,12 @@ void loop()
   //Calculates speed & direction ********
   //speedy = (currentleft - centerleft)* ((200)/(abs(forwardmax)+abs(backwardmax)));
   speedy = currentleft;
-  data[0] = speedy;
+  data[1] = speedy;
   turn = currentright;
-  data[1] = turn;
+  data[0] = turn;
   //*************************************
   
-  delay(10);
+  //delay(10);
   radio.startListening();                    //This sets the module as receiver
  
   if (radio.available())                     //Looking for incoming data
@@ -104,14 +105,14 @@ void loop()
     Serial.print(speedy);
     Serial.print("\tRight Encoder = ");
     Serial.print(currentright);
-  //  Serial.print("\n");
+    Serial.print("\n");
 
     radio.stopListening();
-    Serial.print("\tData[0] = ");
-    Serial.print(data[0]);
-    Serial.print("\tData[1] = ");
-    Serial.print(data[1]);
-    Serial.print("\n");
+//    Serial.print("\tData[0] = ");
+//    Serial.print(data[0]);
+//    Serial.print("\tData[1] = ");
+//    Serial.print(data[1]);
+//    Serial.print("\n");
     radio.write(data, sizeof(data));
     //radio.write(&turn, sizeof(turn));
     //Feedback ****
@@ -144,7 +145,7 @@ void loop()
 //     analogWrite(in_pin1, 0);
 //     analogWrite(in_pin2, 0);
  
-   delay(5);
+   //delay(5);
 //
    radio.stopListening();                           //This sets the module as transmitter
     //recenter();
