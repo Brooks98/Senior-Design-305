@@ -88,7 +88,7 @@ void loop()
     //radio.read(&speedy, sizeof(speedy));
     //radio.read(&turn, sizeof(turn));
     radio.read(data, sizeof(data));
-    speedy=data[1];
+    speedy=data[2];
     turn=data[0]; 
     double speedy2 = speedy*1.0;
 //    Serial.print("Speed = ");
