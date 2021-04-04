@@ -2,8 +2,8 @@
 #include <nRF24L01.h>
 #include <RF24.h>
 #include <Servo.h>
-//#define echoPin 0 // HC-SR04 echo pin to D4
-//#define trigPin 1 //HC-SR04 trig pin to D5 (PWM
+#define echoPin A1 // HC-SR04 echo pin to A1
+#define trigPin A0 //HC-SR04 trig pin to A0
 double maxspeed = 512;
 
 // Define variables for radio
@@ -59,21 +59,23 @@ void setup() {
 
 void loop()
 {  // HC-SR04
-//  // Clears the trigPin condition
-//  digitalWrite(trigPin, LOW);
-//  delayMicroseconds(2);
-//  // Sets the trigPin HIGH (ACTIVE) for 10 microseconds
-//  digitalWrite(trigPin, HIGH);
-//  delayMicroseconds(10);
-//  digitalWrite(trigPin, LOW);
-//  // Reads the echoPin, returns the sound wave travel time in microseconds
-//  duration = pulseIn(echoPin, HIGH);
-//  // Calculating the distance
-//  distance = duration * 0.034 / 2; // Speed of sound wave divided by 2 (go and back)
-//  // Displays the distance on the Serial Monitor
-//  Serial.print("Distance: ");
-//  Serial.print(distance);
-//  Serial.println(" cm");
+// Clears the trigPin condition
+  pinMode(trigPin, OUTPUT);
+  pinMode(echoPin, INPUT);
+  digitalWrite(trigPin, HIGH);
+  // Sets the trigPin HIGH (ACTIVE) for 10 microseconds
+  delayMicroseconds(10);
+  digitalWrite(trigPin, LOW);
+  // Reads the echoPin, returns the sound wave travel time in microseconds
+  duration = pulseIn(echoPin, HIGH);
+  // Calculating the distance
+  distance = duration * 0.034 / 2; // Speed of sound wave divided by 2 (go and back)
+  // Displays the distance on the Serial Monitor
+  Serial.print("Distance: ");
+  Serial.print(distance);
+  delay(250);               //delay serial monitor
+  Serial.println(" cm");
+}
 
 
   //// Radio code
