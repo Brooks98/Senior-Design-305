@@ -2,8 +2,14 @@
 #include <nRF24L01.h>
 #include <RF24.h>
 #include <Servo.h>
-#define echoPin A1 // HC-SR04 echo pin to A1
-#define trigPin A0 //HC-SR04 trig pin to A0
+#include <NewPing.h>
+
+#define trigPin_front  2
+#define echoPin_front  2
+#define trigPin_back  3
+#define echoPin_back  3
+#define MAX_DISTANCE 350 // Maximum distance we want to ping for (in centimeters). Maximum sensor distance is rated at 400-500cm.
+#define pingSpeed 100
 double maxspeed = 512;
 
 // Define variables for radio
@@ -19,10 +25,6 @@ int dirServoPin = 2;              // define pin for signal line of the last serv
 float dirServoOffset = 6;         // define a variable for deviation(degree) of the servo
 int turn;
 
-// Define variables for HC-SR04
-long duration; // variable for the duration of sound wave travel
-int distance; // variable for the distance measurement
-
 const int dirAPin = 7;    // define pin used to control rotational direction of motor A
 const int pwmAPin = 6;    // define pin for PWM used to control rotational speed of motor A
 const int dirBPin = 4;    // define pin used to control rotational direction of motor B
@@ -33,6 +35,13 @@ const int pwmBPin = 5;    // define pin for PWM used to control rotational speed
  int speedy;
 // int turn; 
  bool directionleft;
+
+// Define variables for HC-SR04
+unsigned long pingTimer_front, pingTimer_back;
+NewPing sonar_front(trigPin_front, echoPin_front, MAX_DISTANCE); // NewPing setup of pins and maximum distance.
+NewPing sonar_back(trigPin_back, echoPin_back, MAX_DISTANCE); // NewPing setup of pins and maximum distance.
+long duration; // variable for the duration of sound wave travel
+int distance; // variable for the distance measurement
 
 void setup() {
   // void setup for radio and HC-SR04
@@ -58,23 +67,33 @@ void setup() {
  
 
 void loop()
-{  // HC-SR04
-// Clears the trigPin condition
-  pinMode(trigPin, OUTPUT);
-  pinMode(echoPin, INPUT);
-  digitalWrite(trigPin, HIGH);
-  // Sets the trigPin HIGH (ACTIVE) for 10 microseconds
-  delayMicroseconds(10);
-  digitalWrite(trigPin, LOW);
-  // Reads the echoPin, returns the sound wave travel time in microseconds
-  duration = pulseIn(echoPin, HIGH);
-  // Calculating the distance
-  distance = duration * 0.034 / 2; // Speed of sound wave divided by 2 (go and back)
-  // Displays the distance on the Serial Monitor
-  Serial.print("Distance: ");
-  Serial.print(distance);
-  delay(250);               //delay serial monitor
-  Serial.println(" cm");
+{  
+  // HC-SR04
+  
+  //delay(50); // Wait 50ms between pings (about 20 pings/sec). 29ms should be the shortest delay between pings.
+  if (millis() >= pingTimer_front)
+  {
+    pingTimer_front += pingSpeed;
+    int distance1 = sonar_front.ping_in();
+    //duration = sonar.ping();
+    //distance1 = (duration / 2) * 0.0343;
+    Serial.print("Distance Front = ");
+    Serial.print(distance1); // Distance will be 0 when out of set max range.
+    Serial.println(" cm");
+    delay(250);
+  }
+
+  if (millis() >= pingTimer_back)
+  {
+    pingTimer_back = pingTimer_front + (pingSpeed/2);
+    int distance2 = sonar_back.ping_in();
+    Serial.print("\t\t\tDistance Back = ");
+    Serial.print(distance2); // Distance will be 0 when out of set max range.
+    Serial.println(" cm");
+    delay(250);
+  }
+  
+  delay(500);
 }
 
 
@@ -135,3 +154,4 @@ void loop()
   }
   
 }
+*/
