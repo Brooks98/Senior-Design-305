@@ -10,7 +10,7 @@ long positionLeft  = -999;
 
 int in_pin1 = 20;
 int in_pin2 = 19;
-int enable_pinL = 21;
+int enable_pinL = 37;
 
 int in_pin3 = 17;
 int in_pin4 = 16;
@@ -29,7 +29,7 @@ int currentright;
 
 //Radio *********************************
 RF24 radio(8, 7); // CE, CSN
-const byte addresses [][6] = {"007", "001"};    //Setting the two addresses. One for transmitting and one for receiving
+const byte addresses [][6] = {"00001", "00002"};    //Setting the two addresses. One for transmitting and one for receiving
 int distance = 0;
 //***************************************
 
@@ -95,24 +95,17 @@ void loop()
  
   if (radio.available())                     //Looking for incoming data
   {
-    //radio.read(&distance, sizeof(distance)); // reading in data for distance sensor
-//    Serial.print("Distance: ");
-//    Serial.print(distance);
-//    Serial.println(" cm");
+
     Serial.print("Left Encoder = ");
     Serial.print(currentleft);
     Serial.print("\tSpeedy = ");
     Serial.print(speedy);
     Serial.print("\tRight Encoder = ");
     Serial.print(currentright);
-    Serial.print("\n");
+    Serial.print("\t");
 
     radio.stopListening();
-//    Serial.print("\tData[0] = ");
-//    Serial.print(data[0]);
-//    Serial.print("\tData[1] = ");
-//    Serial.print(data[1]);
-//    Serial.print("\n");
+
     radio.write(data, sizeof(data));
     //radio.write(&turn, sizeof(turn));
     //Feedback ****
@@ -146,10 +139,54 @@ void loop()
 //     analogWrite(in_pin2, 0);
  
    //delay(5);
-//
-   radio.stopListening();                           //This sets the module as transmitter
-    //recenter();
+    radio.startListening(); 
+    
+    radio.read(&distance, sizeof(distance)); // reading in data for distance sensor
+    Serial.print("Distance: ");
+    Serial.print(distance);
+    Serial.println(" cm");
   }
+  else
+  {
+//    delay(1000);
+//    Serial.print("Radio Not reading\n");
+  }
+
+   
+//**********************************************************
+ if(currentleft > (centerleft + 5) && (distance < 40))
+    {
+//      Serial.print("in loop\n");
+//      newLeft = motorleft.read();
+//      if (newLeft != currentleft) {
+//        current = newLeft;
+//      }
+//      delay(10);
+
+      int joystickspeed = distance;
+      if (distance > 3)
+      {
+        map(joystickspeed, 0, 40, 200, 100);
+      }
+      else 
+      {
+        joystickspeed = 200;
+      }
+
+      leftbackward(joystickspeed);
+       
+    }
+    else 
+    {
+      digitalWrite(in_pin1, LOW);
+      digitalWrite(in_pin2, LOW);
+//      digitalWrite(in_pin3, LOW);
+//      digitalWrite(in_pin4, LOW);
+    }
+ 
+//*********************************************************
+   //radio.stopListening();                           //This sets the module as transmitter
+    //recenter();
 }
 
 void initialvalues(){
