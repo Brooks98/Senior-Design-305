@@ -9,7 +9,7 @@ ISSUES: Got it to emulate a mass-spring-damper system, but in the "negative" dir
           6) Introduce Dead Zones
           7) Zero Integrator when crossing zero angle
 
-IN PROGRESS: See CurrentControlPIDtest to mess around with some of this
+STATUS: DEBUGGING. All basic functionality implemented
 
 Using an object oriented approach because it would become nightmare spaghetti without; this will give a super clean interface and keep our main file nice and clean.
 
@@ -57,5 +57,5 @@ It will have the following configuration/maintenence methods
  -Read Position
  
  Other Classes we'll need in this class:
- Adafruit_INA219  - Altered, Need to check liscense
- SmartFilter - Custom
+ Adafruit_INA219  - Altered, Need to check liscense. Changed sample averaging parameter. MUST INCLUDE SOURCE IN PROJECT DIRECTORY!
+ FilterIIR - Custom, Chris Johnson
