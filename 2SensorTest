@@ -1,0 +1,49 @@
+/* HC-SR04 ultrasonic distance sensor with NewPing library example code. More info: www.makerguides.com */
+// Include the library:
+#include <NewPing.h>
+// Define pins and max distance:
+#define trigPin_front  2
+#define echoPin_front  2
+#define trigPin_back  3
+#define echoPin_back  3
+#define MAX_DISTANCE 350 // Maximum distance we want to ping for (in centimeters). Maximum sensor distance is rated at 400-500cm.
+#define pingSpeed 100
+
+unsigned long pingTimer_front, pingTimer_back;
+NewPing sonar_front(trigPin_front, echoPin_front, MAX_DISTANCE); // NewPing setup of pins and maximum distance.
+NewPing sonar_back(trigPin_back, echoPin_back, MAX_DISTANCE); // NewPing setup of pins and maximum distance.
+int duration, distance;
+
+void setup() {
+  Serial.begin(9600); // Open serial monitor at 9600 baud to see ping results.
+  //pingTimer_front = millis() + pingSpeed; // Sensor 1 fires after 100ms (pingSpeed)
+  //pingTimer_back = pingTimer1 + (pingSpeed / 2); // Sensor 2 fires 50ms later
+}
+
+void loop() {
+  //delay(50); // Wait 50ms between pings (about 20 pings/sec). 29ms should be the shortest delay between pings.
+
+  if (millis() >= pingTimer_front)
+  {
+    pingTimer_front += pingSpeed;
+    int distance1 = sonar_front.ping_in();
+    //duration = sonar.ping();
+    //distance1 = (duration / 2) * 0.0343;
+    Serial.print("Distance Front = ");
+    Serial.print(distance1); // Distance will be 0 when out of set max range.
+    Serial.println(" cm");
+    delay(250);
+  }
+
+  if (millis() >= pingTimer_back)
+  {
+    pingTimer_back = pingTimer_front + (pingSpeed/2);
+    int distance2 = sonar_back.ping_in();
+    Serial.print("\t\t\tDistance Back = ");
+    Serial.print(distance2); // Distance will be 0 when out of set max range.
+    Serial.println(" cm");
+    delay(250);
+  }
+  
+  delay(500);
+}
