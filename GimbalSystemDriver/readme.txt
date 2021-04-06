@@ -1,3 +1,14 @@
+ISSUES: Got it to emulate a mass-spring-damper system, but in the "negative" direction, things are very off. May be because our current sensor is only high-side capable. Idk. 
+        Going to hope it's issue with PID controller
+        To combat this, going to try
+          1) Integral Anti Windup - Zero Integrator when error term crosses zero 
+          2) Limit Integral Term - Was broken before
+          3) Gain Scheduling (Positive/Negative Regions, Low Angle, High Angle), based on angle or desired torque
+          4) Boost that sample rate to the moon (400-800Hz)
+          5) Mess With Filtering some more
+          6) Introduce Dead Zones
+          7) Zero Integrator when crossing zero angle
+
 IN PROGRESS: See CurrentControlPIDtest to mess around with some of this
 
 Using an object oriented approach because it would become nightmare spaghetti without; this will give a super clean interface and keep our main file nice and clean.
