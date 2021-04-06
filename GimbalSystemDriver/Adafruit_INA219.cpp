@@ -467,7 +467,7 @@ void Adafruit_INA219::setCalibration_16V_400mA() {
   // Set Config register to take into account the settings above
   uint16_t config = INA219_CONFIG_BVOLTAGERANGE_16V |
                     INA219_CONFIG_GAIN_1_40MV | INA219_CONFIG_BADCRES_12BIT |
-                    INA219_CONFIG_SADCRES_12BIT_2S_1060US |
+                    INA219_CONFIG_SADCRES_12BIT_4S_2130US |
                     INA219_CONFIG_MODE_SANDBVOLT_CONTINUOUS;
 
   Adafruit_BusIO_Register config_reg =
