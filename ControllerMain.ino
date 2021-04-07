@@ -1,3 +1,6 @@
+
+
+
 //Encoder *********************************
 #include <Encoder.h>
 #include <SPI.h>
@@ -16,14 +19,14 @@ int in_pin3 = 17;
 int in_pin4 = 16;
 int enable_pinR = 18;
 
-int forwardmax;
-int backwardmax;
-int centerleft;
+int forwardmax = 50;
+int backwardmax = -50;
+int centerleft = 0;
 int currentleft;
 
-int rightmax;
-int leftmax;
-int centerright;
+int rightmax = -50;
+int leftmax = 50;
+int centerright = 0;
 int currentright;
 //****************************************
 
@@ -64,10 +67,8 @@ void setup() {
 }
 void loop()
 { 
-  
-  centerleft = 0;
-  forwardmax = 50;
-  backwardmax = -50;
+
+
 //  delay(100);
   // Gets encoder values **********
   int newLeft;
@@ -114,66 +115,23 @@ void loop()
     radio.read(&distance, sizeof(distance)); // reading in data for distance sensor
     Serial.print("Distance: ");
     Serial.print(distance);
-    Serial.println(" cm");
-//
-//    radio.stopListening();
-//
-//    radio.write(data, sizeof(data));
-    //radio.write(&turn, sizeof(turn));
-    //Feedback ****
-//    while(current > center + 5 && distance < 20)
-//    {
-//      newLeft = motorleft.read();
-//      if (newLeft != current) {
-//        current = newLeft;
-//      }
-//      delay(10);
-//      radio.startListening();
-//      radio.read(&distance, sizeof(distance)); // reading in data for distance sensor
-//      Serial.print("Distance: ");
-//      Serial.print(distance);
-//  //    Serial.println(" cm");
-//      Serial.print("cm\tLeft Encoder = ");
-//      Serial.print(current);
-//      Serial.print("\n");
-//      digitalWrite(enable_pin, HIGH);
-//     analogWrite(in_pin1, 150);
-//     analogWrite(in_pin2, 0);
-//    
-////     digitalWrite(enable_pin, HIGH);
-////     analogWrite(in_pin1, 0);
-////     analogWrite(in_pin2, 0);
-//      radio.stopListening();  
-//    }
-//    
-//     digitalWrite(enable_pin, HIGH);
-//     analogWrite(in_pin1, 0);
-//     analogWrite(in_pin2, 0);
- 
-//    delay(5);
-//    radio.startListening();
-   
- 
+    Serial.println(" cm"); 
   }
-//  else
-//  {
-////    delay(1000);
-////    Serial.print("Radio Not reading\n");
-//  }
+
 
    
 //**********************************************************
- if(currentleft > (centerleft + 5) && (distance < 20))
+ if(currentleft > (centerleft + 5) && (distance < 30))
     {
       Serial.print("in if\n");
       int joystickspeed;
       if (distance > 3)
       {
-        joystickspeed = map(distance, 0, 20, 200, 175);
+        joystickspeed = map(distance, 0, 30, 210, 175);
       }
       else
       {
-        joystickspeed = 200;
+        joystickspeed = 210;
       }
 
       leftbackward(joystickspeed);
@@ -183,13 +141,11 @@ void loop()
     {
       digitalWrite(in_pin1, LOW);
       digitalWrite(in_pin2, LOW);
-//      digitalWrite(in_pin3, LOW);
-//      digitalWrite(in_pin4, LOW);
+      digitalWrite(in_pin3, LOW);
+      digitalWrite(in_pin4, LOW);
+//      recenterleft();
     }
- 
-//*********************************************************
-   //radio.stopListening();                           //This sets the module as transmitter
-    //recenter();
+       recenterright();
 }
 
 void initialvalues(){
@@ -238,64 +194,57 @@ void leftstop()
   digitalWrite(in_pin1, 0);
   digitalWrite(in_pin2, 0);
 }
-void recenter(){
-  while (currentleft < centerleft - 5 || currentleft > centerleft + 5)
-  {
-    delay(10);
-    if (currentleft < centerleft - 5)
+void rightright(int sp)
+{
+  analogWrite(enable_pinR, sp);
+  digitalWrite(in_pin3, HIGH);
+  digitalWrite(in_pin4, 0);
+}
+void rightleft(int sp)
+{
+  analogWrite(enable_pinR, sp);
+  digitalWrite(in_pin3, 0);
+  digitalWrite(in_pin4, HIGH);
+}
+void rightstop()
+{
+  analogWrite(enable_pinR, 0);
+  digitalWrite(in_pin3, 0);
+  digitalWrite(in_pin4, 0);
+}
+void recenterleft(){
+    if (currentleft < centerleft - 7)
     {
-      leftforward(150);
-      long newLeft;
-      newLeft = motorleft.read();
-   
-      if (newLeft != currentleft) {
-        Serial.print("Left = ");
-        Serial.print(newLeft);
-        Serial.print("\n");
-   
-        currentleft = newLeft;
-      }
+      leftforward(175);
     }
-    if (currentleft > centerleft + 5)
+    else if (currentleft > centerleft + 7)
     {
-       leftbackward(150);
-      long newLeft;
-      newLeft = motorleft.read();
-   
-      if (newLeft != currentleft) {
-        Serial.print("Left = ");
-        Serial.print(newLeft);
-        Serial.print("\n");
-   
-        currentleft = newLeft;
+       leftbackward(175);
     }
-  }
-  }
-   leftstop();
+    else
+    {
+      leftstop();
+    }
+}
+void recenterright(){
+    if (currentright < centerright - 5)
+    {
+      int sp = constrain(currentright , -5, -50);
+      sp = map(sp, -5,-50, 165, 180);
+      
+      rightleft(sp);
 
-   
-//  while(current > center + 5)
-//  {
-//    digitalWrite(enable_pin, HIGH);
-//    analogWrite(in_pin1, 150);
-//    analogWrite(in_pin2, 0);
-//    long newLeft;
-//    newLeft = motorleft.read();
-//  
-//    if (newLeft != current) {
-//      Serial.print("Left = ");
-//      Serial.print(newLeft);
-//      Serial.print("\n");
-//  
-//      current = newLeft;
-////       digitalWrite(enable_pin, HIGH);
-////    analogWrite(in_pin1, 0);
-////    analogWrite(in_pin2, 0);
-////      delay(50);
-//    }
-//  }
-//   digitalWrite(enable_pin, HIGH);
-//    analogWrite(in_pin1, 0);
-//    analogWrite(in_pin2, 0);
- 
+    }
+    else if(currentright > centerright + 5)
+    {
+      int sp = constrain(currentright , 5, 50);
+      sp = map(sp, 5,50, 165, 180);
+      
+      rightright(sp); 
+    }
+    else
+    {
+      rightstop();
+    }
+
 }
