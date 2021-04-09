@@ -1,11 +1,10 @@
-IN PROGRESS: See CurrentControlPIDtest to mess around with some of this
-
 Using an object oriented approach because it would become nightmare spaghetti without; this will give a super clean interface and keep our main file nice and clean.
 
 Here, I want to build a class that has all the tools we need to fine tune the control of our motors.
 Hopefully then, actually building the control algorithms for the haptic feedback will be much simpler.
 Included will be motor and gimbal system parameters.
-For simple PID control, we don't need these. However, it would be interesting to try state-space and utilize these. Since we should have all these parameters, 
+
+For simple PID control, we don't need these. However, it would be interesting to try a state-space method and utilize these. Since we should have all these parameters, 
 "Smoke em if you got em" as they say. We'll use Kv/Kd to convert between voltage/speed and current/torque.
 
 Here's my psuedo-code, which in this case is just a layout of what the object should be able to do. Most is already
@@ -46,5 +45,5 @@ It will have the following configuration/maintenence methods
  -Read Position
  
  Other Classes we'll need in this class:
- Adafruit_INA219  - Altered, Need to check liscense
- SmartFilter - Custom
+ Adafruit_INA219  - Altered, open-source from Adafruit, sensor breakout retailer
+ FilterIIR - Quick little class I wrote to provide an interface for filtering a stream of floats
