@@ -71,5 +71,5 @@ It will have the following configuration/maintenence methods
  -Read Position
  
  Other Classes we'll need in this class:
- Adafruit_INA219  - Altered, open-source from Adafruit, sensor breakout retailer
+ Adafruit_INA219  - Altered, open-source from Adafruit, sensor breakout retailer. I alter the configuration member functions to optimize averaging/resolution options for a given sample rate.
  FilterIIR - Quick little class I wrote to provide an interface for filtering a stream of floats
