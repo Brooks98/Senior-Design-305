@@ -1,4 +1,4 @@
-STATUS: DEBUGGING. All basic functionality implemented
+STATUS: TESTING. All basic functionality implemented and tested
 
 Issues we faced and how we solved them: 
 
